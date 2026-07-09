@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
   const [curtainEnded, setCurtainEnded] = useState(false);
   const [skipCurtain, setSkipCurtain] = useState(false);
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [mediaErrors, setMediaErrors] = useState<Record<string, boolean>>({});
   const handleMediaError = (key: string) => setMediaErrors((prev) => ({ ...prev, [key]: true }));
 
+  // Force showMainSite to true if you are still having trouble seeing content
   const showMainSite = curtainEnded || skipCurtain;
 
   return (
     <div className="min-h-screen bg-burgundy-950 text-burgundy-50 font-sans relative overflow-x-hidden">
-      <audio ref={audioRef} src="media/sparks.mp3" loop preload="auto" />
+      <audio ref={audioRef} src="/media/sparks.mp3" loop preload="auto" />
 
       <AnimatePresence>
         {!showMainSite && (
@@ -29,7 +29,7 @@ export default function App() {
             <div className="absolute inset-0 w-full h-full object-cover">
               {!mediaErrors["curtains"] ? (
                 <video 
-                  src="media/curtains.mp4" 
+                  src="/media/curtains.mp4" 
                   autoPlay 
                   muted 
                   playsInline
@@ -45,36 +45,31 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {showMainSite && (
-        <div className="relative min-h-screen w-full">
-          {/* Background Video - set to absolute so it scrolls with the page */}
-          <div className="absolute inset-0 z-0 w-full h-full">
-            <video 
-              src="media/chandelier.mp4" 
-              autoPlay 
-              muted 
-              loop 
-              playsInline
-              className="w-full h-full object-cover opacity-60"
-            />
-          </div>
-          
-          {/* Content Container */}
-          <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
-            <div className="bg-burgundy-950/80 p-10 rounded-xl text-center shadow-2xl border border-gold-500/30">
-              <h1 className="text-5xl font-serif text-cream-100">
-                Yara & Ahmed
-              </h1>
-              <p className="mt-6 text-xl text-cream-200">We are so excited to celebrate with you!</p>
-              
-              {/* This spacer ensures there is enough content to scroll */}
-              <div className="h-[1000px] mt-10">
-                <p className="text-sm text-gold-300">Scroll down to see more...</p>
-              </div>
+      <div className="relative min-h-screen w-full">
+        <div className="absolute inset-0 z-0 w-full h-full">
+          <video 
+            src="/media/chandelier.mp4" 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-full h-full object-cover opacity-60"
+          />
+        </div>
+        
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
+          <div className="bg-burgundy-950/80 p-10 rounded-xl text-center shadow-2xl border border-gold-500/30">
+            <h1 className="text-5xl font-serif text-cream-100">
+              Yara & Ahmed
+            </h1>
+            <p className="mt-6 text-xl text-cream-200">We are so excited to celebrate with you!</p>
+            
+            <div className="h-[1000px] mt-10">
+              <p className="text-sm text-gold-300">Scroll down to see more...</p>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
