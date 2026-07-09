@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
   return {
-    // This base path is required for your repository name in the URL
+    // This MUST match your repository name exactly for GitHub Pages
     base: '/burgundy-wedding/', 
     plugins: [react(), tailwindcss()],
     resolve: {
