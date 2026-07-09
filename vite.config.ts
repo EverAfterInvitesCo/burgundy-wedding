@@ -4,7 +4,7 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/burgundy-wedding/',
+  base: './', // Using './' is the most reliable way to force relative paths
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -14,12 +14,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
     sourcemap: false,
   },
-  publicDir: 'public',
 });
