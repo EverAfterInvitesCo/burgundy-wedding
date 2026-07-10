@@ -1,28 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-import { 
-  Heart, MapPin, Calendar, Clock, Image as ImageIcon, Sparkles, 
-  Upload, Trash2, Shield, Eye, Download, LogIn, Lock, 
-  Instagram, Check, RefreshCw, ChevronRight, Sparkle, 
-  Volume2, VolumeX, Database 
-} from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
-import { addRsvp, getRsvps, deleteRsvp, addPhoto, subscribeToPhotos, deletePhoto } from "./firebase";
-import {
-  isSupabaseConfigured, getSupabaseCredentials, saveSupabaseCredentials,
-  clearSupabaseCredentials, testSupabaseConnection, syncRsvpToSupabase,
-  syncPhotoToSupabase, deleteRsvpFromSupabase, deletePhotoFromSupabase,
-  fetchSupabaseRsvps, fetchSupabasePhotos
-} from "./supabase";
-
-const SAMPLE_GALLERY = [
-  { id: "sample-1", guestName: "Yara & Ahmed", caption: "Our Engagement Session in Cairo", photoUrl: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80", createdAt: new Date().toISOString() },
-  { id: "sample-2", guestName: "Nour & Karim", caption: "Can't wait to celebrate with you!", photoUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80", createdAt: new Date().toISOString() },
-  { id: "sample-3", guestName: "Ever After Invites", caption: "Perfect day for a perfect couple", photoUrl: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=800&q=80", createdAt: new Date().toISOString() }
-];
+import React, { useState, useRef } from "react";
+import { motion } from "motion/react";
+import { Volume2, VolumeX } from "lucide-react";
+// Note: Ensure your firebase/supabase files are correctly exported if you add them back later
 
 export default function App() {
-  const [curtainEnded, setCurtainEnded] = useState(false);
-  const [skipCurtain, setSkipCurtain] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -37,13 +18,25 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-burgundy-950 text-burgundy-50 font-sans relative overflow-x-hidden selection:bg-gold-500 selection:text-burgundy-950">
-      {/* Audio path updated to relative path to resolve 404 errors on GitHub Pages */}
+    <div className="min-h-screen bg-rose-950 text-white font-sans selection:bg-gold-500 selection:text-burgundy-950">
       <audio ref={audioRef} src="media/sparks.mp3" loop preload="auto" />
       
-      <div className="p-10 text-center">
-        <h1>Yara & Ahmed</h1>
+      <div className="flex justify-end p-6">
+        <button onClick={togglePlayAudio} className="text-gold-200">
+          {isPlayingAudio ? <Volume2 size={24} /> : <VolumeX size={24} />}
+        </button>
       </div>
+
+      <main className="flex flex-col items-center justify-center p-10 text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          <h1 className="text-5xl font-serif mb-4">Yara & Ahmed</h1>
+          <p className="text-xl italic">We invite you to celebrate our special day.</p>
+        </motion.div>
+      </main>
     </div>
   );
 }
