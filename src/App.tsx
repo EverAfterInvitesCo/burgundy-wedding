@@ -1,11 +1,13 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { Volume2, VolumeX, ChevronDown } from "lucide-react";
 
 export default function App() {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
+  // Audio Handler
   const togglePlayAudio = () => {
     if (!audioRef.current) return;
     if (isPlayingAudio) {
@@ -15,6 +17,31 @@ export default function App() {
       audioRef.current.play().then(() => setIsPlayingAudio(true)).catch(console.error);
     }
   };
+
+  // Countdown Logic
+  useEffect(() => {
+    const targetDate = new Date("2026-09-09T18:00:00+02:00").getTime();
+    const updateTimer = () => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      setCountdown({
+        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((distance % (1000 * 60)) / 1000),
+      });
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen bg-rose-950 text-gold-100 font-serif overflow-x-hidden">
@@ -47,6 +74,25 @@ export default function App() {
           <ChevronDown className="mx-auto mt-2 text-gold-500 animate-bounce" />
         </motion.div>
       </div>
+
+      {/* Countdown Section */}
+      <section className="py-20 flex flex-col items-center justify-center border-b border-gold-800/30">
+        <h2 className="text-3xl text-gold-500 mb-12 uppercase tracking-[0.2em]">Counting down the days</h2>
+        
+        <div className="flex gap-8 md:gap-16">
+          {[
+            { label: "Days", value: countdown.days },
+            { label: "Hours", value: countdown.hours },
+            { label: "Minutes", value: countdown.minutes },
+            { label: "Seconds", value: countdown.seconds },
+          ].map((item, idx) => (
+            <div key={idx} className="text-center">
+              <div className="text-4xl md:text-5xl font-serif text-white mb-2">{item.value}</div>
+              <div className="text-[10px] uppercase tracking-widest text-gold-600">{item.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Placeholder for the next section */}
       <div className="p-10 text-center text-gold-500">
